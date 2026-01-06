@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import ConfidenceVisualizer from '../components/ConfidenceVisualizer';
 // TODO: Uncomment these imports to use MobileNet
 // import * as mobilenet from '@tensorflow-models/mobilenet';
 // import * as tf from '@tensorflow/tfjs';
@@ -9,6 +10,7 @@ function PrebuiltClassifier() {
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
+  const [imageUrl, setImageUrl] = useState('');
 
   // TODO: Complete this function to load the MobileNet model
   async function loadModel() {
@@ -79,6 +81,25 @@ function PrebuiltClassifier() {
     img.src = URL.createObjectURL(file);
   }
 
+  // Handle image from URL
+  function handleImageUrl() {
+    if (!imageUrl.trim()) {
+      alert('Please enter an image URL');
+      return;
+    }
+
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      setImagePreview(imageUrl);
+      classifyImage(img);
+    };
+    img.onerror = () => {
+      alert('Failed to load image from URL. Make sure the URL is correct and the image is publicly accessible.');
+    };
+    img.src = imageUrl;
+  }
+
   return (
     <div>
       <div className="card">
@@ -101,45 +122,63 @@ function PrebuiltClassifier() {
           </button>
         </div>
 
-        {/* Step 2: Upload Image */}
+        {/* Step 2: Upload Image or Use URL */}
         {model && (
-          <div style={{ marginBottom: '1.5rem' }}>
-            <h3>Step 2: Upload an Image</h3>
-            {/* TODO: Connect this input to handleImageUpload */}
-            <label className="file-upload-label">
-              Choose Image
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                disabled={loading}
-              />
-            </label>
+          <div className="mb-3">
+            <h3>Step 2: Test with an Image</h3>
+            
+            {/* Option 1: Image URL */}
+            <div className="mb-2">
+              <p style={{ marginBottom: '0.5rem', color: '#6b7280' }}>Option 1: Use Image URL</p>
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <input
+                  type="text"
+                  className="input"
+                  placeholder="https://example.com/image.jpg"
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                  disabled={loading}
+                  style={{ flex: 1 }}
+                />
+                <button className="btn primary" onClick={handleImageUrl} disabled={loading}>
+                  Classify
+                </button>
+              </div>
+              <p style={{ fontSize: '0.875rem', color: '#9ca3af', marginTop: '0.25rem' }}>
+                Try: https://cdn.wizcamp.io/images/team/dooder.jpg
+              </p>
+            </div>
+
+            {/* Option 2: File Upload */}
+            <div>
+              <p style={{ marginBottom: '0.5rem', color: '#6b7280' }}>Option 2: Upload from Computer</p>
+              <label className="file-upload-label">
+                Choose Image
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  disabled={loading}
+                />
+              </label>
+            </div>
           </div>
         )}
 
         {/* Image Preview */}
         {imagePreview && (
-          <div style={{ marginBottom: '1.5rem' }}>
-            <h3>Uploaded Image:</h3>
+          <div className="mb-3">
+            <h3>Image:</h3>
             <img
               src={imagePreview}
               alt="Preview"
-              style={{ maxWidth: '300px', borderRadius: '0.5rem' }}
+              className="image-preview"
             />
           </div>
         )}
 
         {/* Prediction Result */}
-        {prediction && (
-          <div className="alert success">
-            <h3>Prediction:</h3>
-            <p style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#065f46' }}>
-              {prediction.className}
-            </p>
-            <p>Confidence: {(prediction.probability * 100).toFixed(1)}%</p>
-          </div>
-        )}
+        <ConfidenceVisualizer prediction={prediction} />
       </div>
 
       {/* Instructions */}
@@ -150,10 +189,10 @@ function PrebuiltClassifier() {
             Open <code>src/training/PrebuiltClassifier.jsx</code>
           </li>
           <li>Find the TODOs in the code</li>
-          <li>Uncomment the import statement at the top</li>
+          <li>Uncomment the imports at the top</li>
           <li>Uncomment the model loading code in loadModel()</li>
           <li>Uncomment the classification code in classifyImage()</li>
-          <li>Save the file and test it!</li>
+          <li>Save and test with the sample URL or upload an image!</li>
         </ol>
       </div>
     </div>
