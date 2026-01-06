@@ -89,8 +89,8 @@ function CustomTraining() {
         {categories.map((category, index) => (
           <div key={index} className="section">
             {/* Category Header */}
-            <div className="flex" style={{ alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-              <h3 style={{ margin: 0 }}>{category}</h3>
+            <div className="flex align-center gap-1 mb-2">
+              <h3 className="m-0">{category}</h3>
               <span className={`badge ${images[category]?.length === 30 ? 'success' : 'neutral'}`}>
                 {images[category]?.length || 0} / 30 images
               </span>
@@ -124,7 +124,7 @@ function CustomTraining() {
       {/* Instructions */}
       <div className="card">
         <h3>📚 Instructions</h3>
-        <ol style={{ paddingLeft: '1.5rem', lineHeight: '1.8' }}>
+        <ol className="list-padded">
           <li>
             Open <code>src/training/CustomTraining.jsx</code>
           </li>
@@ -144,8 +144,7 @@ function CustomTraining() {
       <div className="card">
         <h3>🚀 Extension (Session 5-6)</h3>
         <p>After mastering cat vs dog, choose your own categories:</p>
-        <ul style={{ paddingLeft: '1.5rem', lineHeight: '1.8' }}>
-          <li><strong>Food:</strong> taco vs burger, pizza vs sushi, donut vs bagel</li>
+        <ul className="list-padded">
           <li><strong>Objects:</strong> car vs truck, phone vs tablet, book vs laptop</li>
           <li><strong>Sports:</strong> basketball vs soccer ball, tennis vs baseball</li>
           <li><strong>Nature:</strong> tree vs flower, mountain vs beach, sun vs moon</li>
@@ -159,8 +158,7 @@ function CustomTraining() {
       <div className="card">
         <h3>🖼️ Free Image Resources (For Your Custom Categories)</h3>
         <p>When you're ready to train on your own categories, use these sources:</p>
-        <ul style={{ paddingLeft: '1.5rem', lineHeight: '1.8' }}>
-          <li>
+        <ul className="list-padded">
             <a href="https://unsplash.com" target="_blank" rel="noopener noreferrer">
               Unsplash
             </a>{' '}

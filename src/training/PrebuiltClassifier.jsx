@@ -129,7 +129,7 @@ function PrebuiltClassifier() {
             
             {/* Option 1: Image URL */}
             <div className="mb-2">
-              <p className="text-muted" style={{ marginBottom: '0.5rem' }}>Option 1: Use Image URL</p>
+              <p className="text-muted mb-1">Option 1: Use Image URL</p>
               <div className="flex flex-gap">
                 <input
                   type="text"
@@ -143,14 +143,14 @@ function PrebuiltClassifier() {
                   Classify
                 </button>
               </div>
-              <p className="text-small text-muted mt-1">
+              <p className="text-small text-muted mt-05">
                 Try: https://cdn.wizcamp.io/images/team/dooder.jpg
               </p>
             </div>
 
             {/* Option 2: File Upload */}
             <div>
-              <p className="text-muted" style={{ marginBottom: '0.5rem' }}>Option 2: Upload from Computer</p>
+              <p className="text-muted mb-1">Option 2: Upload from Computer</p>
               <label className="file-upload-label">
                 Choose Image
                 <input
@@ -183,7 +183,7 @@ function PrebuiltClassifier() {
       {/* Instructions */}
       <div className="card">
         <h3>📚 Instructions</h3>
-        <ol style={{ paddingLeft: '1.5rem', lineHeight: '1.8' }}>
+        <ol className="list-padded">
           <li>
             Open <code>src/training/PrebuiltClassifier.jsx</code>
           </li>
