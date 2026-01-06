@@ -1,9 +1,9 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [react()],
-  base: '/vision-quest/', // Students will change this to their repo name
+  base: command === 'serve' ? '/' : undefined, // Let --base flag work for builds
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
@@ -13,4 +13,4 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
   },
-});
+}));
