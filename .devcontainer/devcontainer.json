@@ -19,6 +19,10 @@
         "eslint.validate": ["javascript", "javascriptreact"],
         "amazonQ.telemetry": false,
         "amazonQ.showInlineCodeSuggestionsWithCodeReferences": false,
+        "amazonQ.shareContentWithAWS": false,
+        "github.copilot.enable": {
+          "*": true
+        },
         "extensions.autoUpdate": false,
         "extensions.autoCheckUpdates": false
       }
