@@ -115,9 +115,9 @@ function PrebuiltClassifier() {
         </div>
 
         {/* Step 1: Load Model */}
-        <div style={{ marginBottom: '1.5rem' }}>
+        <div className="section">
           <h3>Step 1: Load the Model</h3>
-          <button className="primary" onClick={loadModel} disabled={loading || model}>
+          <button className="btn primary" onClick={loadModel} disabled={loading || model}>
             {loading ? 'Loading...' : model ? '✅ Model Loaded' : 'Load Model'}
           </button>
         </div>
@@ -129,29 +129,28 @@ function PrebuiltClassifier() {
             
             {/* Option 1: Image URL */}
             <div className="mb-2">
-              <p style={{ marginBottom: '0.5rem', color: '#6b7280' }}>Option 1: Use Image URL</p>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <p className="text-muted" style={{ marginBottom: '0.5rem' }}>Option 1: Use Image URL</p>
+              <div className="flex flex-gap">
                 <input
                   type="text"
-                  className="input"
+                  className="input flex-1"
                   placeholder="https://example.com/image.jpg"
                   value={imageUrl}
                   onChange={(e) => setImageUrl(e.target.value)}
                   disabled={loading}
-                  style={{ flex: 1 }}
                 />
                 <button className="btn primary" onClick={handleImageUrl} disabled={loading}>
                   Classify
                 </button>
               </div>
-              <p style={{ fontSize: '0.875rem', color: '#9ca3af', marginTop: '0.25rem' }}>
+              <p className="text-small text-muted mt-1">
                 Try: https://cdn.wizcamp.io/images/team/dooder.jpg
               </p>
             </div>
 
             {/* Option 2: File Upload */}
             <div>
-              <p style={{ marginBottom: '0.5rem', color: '#6b7280' }}>Option 2: Upload from Computer</p>
+              <p className="text-muted" style={{ marginBottom: '0.5rem' }}>Option 2: Upload from Computer</p>
               <label className="file-upload-label">
                 Choose Image
                 <input

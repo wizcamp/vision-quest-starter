@@ -82,30 +82,16 @@ function CustomTraining() {
       {/* Category Management */}
       <div className="card">
         <h3>Training Categories: Cat vs Dog</h3>
-        <p style={{ marginBottom: '1rem' }}>
+        <p className="mb-2">
           Use the 30 cat and 30 dog images from the training library to train your classifier.
         </p>
 
         {categories.map((category, index) => (
-          <div key={index} style={{ marginBottom: '2rem' }}>
+          <div key={index} className="section">
             {/* Category Header */}
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '1rem',
-                marginBottom: '1rem',
-              }}
-            >
+            <div className="flex" style={{ alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
               <h3 style={{ margin: 0 }}>{category}</h3>
-              <span
-                style={{
-                  padding: '0.25rem 0.75rem',
-                  background: '#e5e7eb',
-                  borderRadius: '1rem',
-                  fontSize: '0.875rem',
-                }}
-              >
+              <span className={`badge ${images[category]?.length === 30 ? 'success' : 'neutral'}`}>
                 {images[category]?.length || 0} / 30 images
               </span>
             </div>
@@ -125,8 +111,8 @@ function CustomTraining() {
             {/* TODO: Display uploaded images as thumbnails */}
             {/* HINT: Map over images[category] and show each image */}
             {images[category]?.length > 0 && (
-              <div style={{ marginTop: '1rem' }}>
-                <p style={{ fontSize: '0.875rem', color: '#6b7280' }}>
+              <div className="mt-2">
+                <p className="text-small text-muted">
                   TODO: Display image thumbnails here
                 </p>
               </div>
@@ -148,7 +134,7 @@ function CustomTraining() {
           <li>Compare your model's accuracy to MobileNet</li>
         </ol>
 
-        <div className="alert info" style={{ marginTop: '1rem' }}>
+        <div className="alert info mt-2">
           <strong>💡 Goal:</strong> Train a model that can classify cats vs dogs as accurately as
           MobileNet. You have 30 images per category - is that enough?
         </div>
@@ -164,7 +150,7 @@ function CustomTraining() {
           <li><strong>Sports:</strong> basketball vs soccer ball, tennis vs baseball</li>
           <li><strong>Nature:</strong> tree vs flower, mountain vs beach, sun vs moon</li>
         </ul>
-        <p style={{ marginTop: '1rem' }}>
+        <p className="mt-2">
           Collect 20-30 images per category and train a classifier for YOUR categories!
         </p>
       </div>

@@ -14,10 +14,7 @@ function ConfidenceVisualizer({ prediction, label }) {
       <div className="confidence-visualizer">
         <p>Confidence:</p>
         <div className="confidence-bar-container">
-          <div
-            className={`confidence-bar ${confidenceLevel}`}
-            style={{ width: `${confidence}%` }}
-          >
+          <div className={`confidence-bar ${confidenceLevel}`} style={{ width: `${confidence}%` }}>
             {confidence.toFixed(1)}%
           </div>
         </div>
