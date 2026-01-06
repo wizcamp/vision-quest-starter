@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import PrebuiltClassifier from './training/PrebuiltClassifier';
-import CustomTraining from './training/CustomTraining';
+import PrebuiltClassifier from './components/PrebuiltClassifier';
+import CustomTraining from './components/CustomTraining';
 
 function App() {
   const [activeTab, setActiveTab] = useState('prebuilt');

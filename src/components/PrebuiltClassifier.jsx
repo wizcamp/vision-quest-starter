@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import ConfidenceVisualizer from '../components/ConfidenceVisualizer';
+import ConfidenceVisualizer from './ConfidenceVisualizer';
 // TODO: Uncomment these imports to use MobileNet
 // import * as mobilenet from '@tensorflow-models/mobilenet';
 // import * as tf from '@tensorflow/tfjs';
