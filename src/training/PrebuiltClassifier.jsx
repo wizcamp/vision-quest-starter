@@ -1,6 +1,8 @@
 import { useState } from 'react';
-// TODO: Uncomment this import to use MobileNet
+// TODO: Uncomment these imports to use MobileNet
 // import * as mobilenet from '@tensorflow-models/mobilenet';
+// import * as tf from '@tensorflow/tfjs';
+// import '@tensorflow/tfjs-backend-webgl';
 
 function PrebuiltClassifier() {
   const [model, setModel] = useState(null);
@@ -15,6 +17,8 @@ function PrebuiltClassifier() {
     
     try {
       // TODO: Uncomment these lines to load MobileNet
+      // await tf.setBackend('webgl');
+      // await tf.ready();
       // const loadedModel = await mobilenet.load();
       // setModel(loadedModel);
       // console.log('✅ Model loaded successfully!');
