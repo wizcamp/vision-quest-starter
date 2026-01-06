@@ -159,6 +159,7 @@ function CustomTraining() {
         <h3>🖼️ Free Image Resources (For Your Custom Categories)</h3>
         <p>When you're ready to train on your own categories, use these sources:</p>
         <ul className="list-padded">
+          <li>
             <a href="https://unsplash.com" target="_blank" rel="noopener noreferrer">
               Unsplash
             </a>{' '}
