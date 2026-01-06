@@ -7,7 +7,8 @@
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "GitHub.copilot",
-        "amazonwebservices.amazon-q-vscode"
+        "amazonwebservices.amazon-q-vscode",
+        "gerane.theme-dark-dracula@0.0.5"
       ],
       "settings": {
         "editor.formatOnSave": true,
@@ -16,6 +17,8 @@
           "source.fixAll.eslint": "explicit"
         },
         "eslint.validate": ["javascript", "javascriptreact"],
+        "amazonQ.telemetry": false,
+        "amazonQ.showInlineCodeSuggestionsWithCodeReferences": false,
         "extensions.autoUpdate": false,
         "extensions.autoCheckUpdates": false
       }
