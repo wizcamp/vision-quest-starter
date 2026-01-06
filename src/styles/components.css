@@ -137,43 +137,7 @@
   background: #ef4444;
 }
 
-/* Utility Classes */
-.mb-05 { margin-bottom: 0.25rem; }
-.mb-1 { margin-bottom: 0.5rem; }
-.mb-2 { margin-bottom: 1rem; }
-.mb-3 { margin-bottom: 1.5rem; }
-.mb-4 { margin-bottom: 2rem; }
 
-.mt-05 { margin-top: 0.25rem; }
-.mt-1 { margin-top: 0.5rem; }
-.mt-2 { margin-top: 1rem; }
-.mt-3 { margin-top: 1.5rem; }
-.mt-4 { margin-top: 2rem; }
-
-.m-0 { margin: 0; }
-
-.text-center { text-align: center; }
-.text-muted { color: #6b7280; }
-.text-small { font-size: 0.875rem; }
-.font-bold { font-weight: bold; }
-
-/* Layout Utilities */
-.flex { display: flex; }
-.flex-gap { gap: 0.5rem; }
-.flex-1 { flex: 1; }
-.align-center { align-items: center; }
-.gap-1 { gap: 1rem; }
-
-/* List Styles */
-.list-padded {
-  padding-left: 1.5rem;
-  line-height: 1.8;
-}
-
-/* Section Spacing */
-.section {
-  margin-bottom: 1.5rem;
-}
 
 /* Image Grid */
 .image-grid {
