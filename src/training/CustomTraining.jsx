@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
 function CustomTraining() {
-  const [categories, setCategories] = useState(['Category 1', 'Category 2']);
-  const [images, setImages] = useState({ 'Category 1': [], 'Category 2': [] });
+  const [categories, setCategories] = useState(['cat', 'dog']);
+  const [images, setImages] = useState({ cat: [], dog: [] });
   const [uploading, setUploading] = useState(false);
 
   // TODO: Complete this function to upload images to the server
@@ -68,20 +68,22 @@ function CustomTraining() {
     <div>
       <div className="card">
         <h2>Custom Training</h2>
-        <p>Collect your own training images and build a custom classifier!</p>
+        <p>
+          Train your own cat vs dog classifier using the images in the training library. Can you
+          match MobileNet's accuracy?
+        </p>
 
         <div className="alert info">
-          <strong>📝 Your Task:</strong> Complete the TODOs to enable image uploading and
-          organization.
+          <strong>📝 Your Task:</strong> Complete the TODOs to load training images and train your
+          model.
         </div>
       </div>
 
       {/* Category Management */}
       <div className="card">
-        <h3>Your Categories</h3>
+        <h3>Training Categories: Cat vs Dog</h3>
         <p style={{ marginBottom: '1rem' }}>
-          Choose 2-3 categories you want to classify. Examples: dogs vs cats, pizza vs burger,
-          etc.
+          Use the 30 cat and 30 dog images from the training library to train your classifier.
         </p>
 
         {categories.map((category, index) => (
@@ -140,22 +142,37 @@ function CustomTraining() {
           <li>
             Open <code>src/training/CustomTraining.jsx</code>
           </li>
-          <li>Complete the uploadImage() function</li>
-          <li>Add code to update the images state after upload</li>
-          <li>Add code to display image thumbnails</li>
-          <li>Test by uploading images for each category</li>
+          <li>Complete the TODO to load images from training-library/cat and training-library/dog</li>
+          <li>Add code to display the loaded images</li>
+          <li>Complete the training function (Session 4)</li>
+          <li>Compare your model's accuracy to MobileNet</li>
         </ol>
 
         <div className="alert info" style={{ marginTop: '1rem' }}>
-          <strong>💡 Tip:</strong> Collect 20-30 images per category for best results. Use varied
-          angles, lighting, and backgrounds!
+          <strong>💡 Goal:</strong> Train a model that can classify cats vs dogs as accurately as
+          MobileNet. You have 30 images per category - is that enough?
         </div>
       </div>
 
-      {/* Resources */}
+      {/* Extension */}
       <div className="card">
-        <h3>🖼️ Free Image Resources</h3>
-        <p>Need images for training? Use these copyright-free sources:</p>
+        <h3>🚀 Extension (Session 5-6)</h3>
+        <p>After mastering cat vs dog, choose your own categories:</p>
+        <ul style={{ paddingLeft: '1.5rem', lineHeight: '1.8' }}>
+          <li><strong>Food:</strong> taco vs burger, pizza vs sushi, donut vs bagel</li>
+          <li><strong>Objects:</strong> car vs truck, phone vs tablet, book vs laptop</li>
+          <li><strong>Sports:</strong> basketball vs soccer ball, tennis vs baseball</li>
+          <li><strong>Nature:</strong> tree vs flower, mountain vs beach, sun vs moon</li>
+        </ul>
+        <p style={{ marginTop: '1rem' }}>
+          Collect 20-30 images per category and train a classifier for YOUR categories!
+        </p>
+      </div>
+
+      {/* Resources for Extension */}
+      <div className="card">
+        <h3>🖼️ Free Image Resources (For Your Custom Categories)</h3>
+        <p>When you're ready to train on your own categories, use these sources:</p>
         <ul style={{ paddingLeft: '1.5rem', lineHeight: '1.8' }}>
           <li>
             <a href="https://unsplash.com" target="_blank" rel="noopener noreferrer">

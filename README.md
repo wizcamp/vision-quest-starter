@@ -17,30 +17,29 @@ Build your own AI-powered image classifier using machine learning!
 
 ## 📚 What You'll Build
 
-Train a custom image classifier that recognizes categories YOU choose:
-- Your pets vs other animals
-- Different types of food
-- Sports equipment
-- Anything with 2-3 clear categories!
+Learn machine learning by training an image classifier:
+- **Sessions 1-2:** Use MobileNet to classify cats vs dogs
+- **Sessions 3-4:** Train your own cat vs dog classifier
+- **Sessions 5-6:** Choose YOUR categories (taco vs burger, etc.) and compete!
 
 ## 🎯 Learning Path
 
-### Phase 1: Learn with Pre-built Data (Sessions 1-2)
-- Understand how ML classification works
-- Use MobileNet to classify 1000+ objects
-- See confidence scores and predictions in real-time
+### Phase 1: Pre-trained Model (Sessions 1-2)
+- Use MobileNet to classify cats vs dogs
+- Understand confidence scores and predictions
+- See how well pre-trained models work
 - **Scaffolding:** 80% complete - uncomment code to make it work
 
-### Phase 2: Collect Custom Data (Sessions 3-4)
-- Upload your own training images
-- Organize images by category
-- Learn about data quality and quantity
+### Phase 2: Train Custom Model (Sessions 3-4)
+- Train your own cat vs dog classifier
+- Try to match MobileNet's accuracy
+- Learn about training data and epochs
 - **Scaffolding:** 60% complete - complete functions and build UI
 
-### Phase 3: Train Custom Model (Session 5)
-- Use transfer learning to train on your data
-- Watch accuracy improve over epochs
-- Test your custom classifier
+### Phase 3: Your Categories (Session 5)
+- Choose your own categories (food, objects, etc.)
+- Collect training images
+- Train and test your custom classifier
 - **Scaffolding:** 30% complete - build from scratch with hints
 
 ### Phase 4: Deploy & Share (Session 6)
@@ -53,10 +52,10 @@ Train a custom image classifier that recognizes categories YOU choose:
 ```
 vision-quest-starter/
 ├── public/
-│   ├── training-library/      # Pre-built datasets (provided)
-│   │   ├── food/              # Pizza, burger, taco
-│   │   └── animals/           # Dog, cat, bird
-│   └── my-training-data/      # Your custom images (you create)
+│   ├── training-library/      # Cat vs dog dataset (provided)
+│   │   ├── cat/               # 30 cat images
+│   │   └── dog/               # 30 dog images
+│   └── my-training-data/      # Your custom categories (you create)
 ├── src/
 │   ├── training/
 │   │   ├── PrebuiltClassifier.jsx   # Session 1-2
@@ -101,12 +100,11 @@ See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
 
 Follow along with the session guides provided by your instructor:
 
-- **Session 0:** Setup & Introduction to ML
-- **Session 1:** Understanding Image Classification
-- **Session 2:** Training with Pre-built Models
-- **Session 3:** Collecting Custom Training Data
-- **Session 4:** Organizing and Uploading Images
-- **Session 5:** Training Your Custom Model
+- **Session 1:** Pre-trained Classification (MobileNet)
+- **Session 2:** Understanding Confidence & Accuracy
+- **Session 3:** Training Custom Cat vs Dog Classifier
+- **Session 4:** Comparing Your Model to MobileNet
+- **Session 5:** Choose Your Categories & Train
 - **Session 6:** Deployment & Showcase
 
 ## 🖼️ Free Image Resources

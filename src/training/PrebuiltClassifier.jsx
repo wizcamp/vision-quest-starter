@@ -80,13 +80,13 @@ function PrebuiltClassifier() {
       <div className="card">
         <h2>Pre-built Image Classifier</h2>
         <p>
-          This classifier uses MobileNet, a pre-trained model that can recognize 1000+ common
-          objects.
+          This classifier uses MobileNet, a pre-trained model that recognizes 1000+ objects
+          including cats and dogs. Let's see how well it works!
         </p>
 
         <div className="alert info">
           <strong>📝 Your Task:</strong> Complete the TODOs in the code to make this classifier
-          work!
+          work. Then test it with cat and dog images!
         </div>
 
         {/* Step 1: Load Model */}
