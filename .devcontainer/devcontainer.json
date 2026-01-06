@@ -22,7 +22,6 @@
     }
   },
   "forwardPorts": [5173, 3001],
-  "postCreateCommand": "npm install",
   "portsAttributes": {
     "5173": {
       "label": "Vite Dev Server",
