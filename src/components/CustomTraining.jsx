@@ -1,67 +1,128 @@
 import { useState } from 'react';
+import * as tf from '@tensorflow/tfjs';
+import * as mobilenet from '@tensorflow-models/mobilenet';
+import ConfidenceVisualizer from './ConfidenceVisualizer';
 
 function CustomTraining() {
   const [categories, setCategories] = useState(['cat', 'dog']);
   const [images, setImages] = useState({ cat: [], dog: [] });
-  const [uploading, setUploading] = useState(false);
+  const [model, setModel] = useState(null);
+  const [training, setTraining] = useState(false);
+  const [trainingProgress, setTrainingProgress] = useState({ epoch: 0, loss: 0, accuracy: 0 });
+  const [prediction, setPrediction] = useState(null);
 
-  // TODO: Complete this function to upload images to the server
-  async function uploadImage(file, category) {
-    setUploading(true);
-
-    try {
-      // Create FormData to send file
-      const formData = new FormData();
-      
-      // TODO: Add the file to formData
-      // HINT: formData.append('image', file);
-      
-      // TODO: Add the category to formData
-      // HINT: formData.append('category', category);
-
-      // Send to server
-      const response = await fetch('http://localhost:3001/api/upload-image', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log('✅ Image uploaded:', data.filename);
-
-        // TODO: Update the images state to include the new image
-        // HINT: Use setImages() with the spread operator
-        // setImages(prev => ({
-        //   ...prev,
-        //   [category]: [...prev[category], data.filename]
-        // }));
-        
-        alert('Image uploaded successfully!');
-      } else {
-        throw new Error('Upload failed');
-      }
-    } catch (error) {
-      console.error('Upload error:', error);
-      alert('Failed to upload image. Make sure the server is running!');
-    }
-
-    setUploading(false);
+  // TODO SESSION-03: Complete this function to load training images
+  async function loadTrainingImages() {
+    // YOUR CODE HERE
+    console.log('TODO: Load training images');
   }
 
-  // Handle file selection
-  function handleFileSelect(event, category) {
-    const files = Array.from(event.target.files);
-    
-    // Upload each file
-    files.forEach(file => {
-      uploadImage(file, category);
+  // Helper function to load an image (PROVIDED)
+  async function loadImage(imagePath) {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => resolve(img);
+      img.src = imagePath;
     });
   }
 
-  // TODO: Add function to update category names
-  function updateCategoryName(oldName, newName) {
+  // TODO SESSION-04: Complete this function to convert images to tensors
+  async function createTrainingData() {
+    console.log('Creating training data...');
+    
+    const xs = []; // Features (images)
+    const ys = []; // Labels (0=cat, 1=dog)
+    
+    // Load MobileNet for feature extraction
+    const mobilenetModel = await mobilenet.load();
+    
+    // TODO: Process cat images (label = 0)
     // YOUR CODE HERE
-    // HINT: Update both categories array and images object
+    
+    // TODO: Process dog images (label = 1)
+    // YOUR CODE HERE
+    
+    // Convert to tensors
+    const xsTensor = tf.stack(xs);
+    const ysTensor = tf.oneHot(tf.tensor1d(ys, 'int32'), 2);
+    
+    // Clean up
+    xs.forEach(x => x.dispose());
+    
+    console.log('✅ Training data created');
+    return { xs: xsTensor, ys: ysTensor };
+  }
+
+  // Model architecture (PROVIDED - from SESSION-03)
+  function createModel() {
+    const model = tf.sequential();
+    
+    // Dense layer with 128 neurons
+    model.add(tf.layers.dense({
+      inputShape: [1024], // MobileNet feature size
+      units: 128,
+      activation: 'relu'
+    }));
+    
+    // Dropout for regularization
+    model.add(tf.layers.dropout({ rate: 0.5 }));
+    
+    // Output layer (2 classes: cat, dog)
+    model.add(tf.layers.dense({
+      units: 2,
+      activation: 'softmax'
+    }));
+    
+    // Compile model
+    model.compile({
+      optimizer: tf.train.adam(0.001),
+      loss: 'categoricalCrossentropy',
+      metrics: ['accuracy']
+    });
+    
+    console.log('✅ Model architecture created');
+    return model;
+  }
+
+  // TODO SESSION-04: Complete this function to train the model
+  async function trainModel() {
+    setTraining(true);
+    
+    try {
+      // Create training data
+      const { xs, ys } = await createTrainingData();
+      
+      // Create model
+      const trainedModel = createModel();
+      
+      // TODO: Add training code here
+      // YOUR CODE HERE
+      
+      setModel(trainedModel);
+      console.log('✅ Training complete!');
+      
+      // Clean up
+      xs.dispose();
+      ys.dispose();
+      
+    } catch (error) {
+      console.error('Training error:', error);
+      alert('Training failed. Check console for details.');
+    }
+    
+    setTraining(false);
+  }
+
+  // TODO SESSION-04: Complete this function to classify images
+  async function classifyWithCustomModel(imageUrl) {
+    if (!model) {
+      alert('Train the model first!');
+      return;
+    }
+
+    // TODO: Add classification code here
+    // YOUR CODE HERE
   }
 
   return (
@@ -69,26 +130,19 @@ function CustomTraining() {
       <div className="card">
         <h2>Custom Training</h2>
         <p>
-          Train your own cat vs dog classifier using the images in the training library. Can you
-          match MobileNet's accuracy?
+          Train your own cat vs dog classifier using transfer learning. Can you match MobileNet's
+          95% accuracy with only 60 images?
         </p>
-
-        <div className="alert info">
-          <strong>📝 Your Task:</strong> Complete the TODOs to load training images and train your
-          model.
-        </div>
       </div>
 
-      {/* Category Management */}
+      {/* Training Categories */}
       <div className="card">
-        <h3>Training Categories: Cat vs Dog</h3>
-        <p className="mb-2">
-          Use the 30 cat and 30 dog images from the training library to train your classifier.
-        </p>
+        <h3>Training Categories</h3>
+
+        {/* TODO SESSION-03: Add Load Training Images button here */}
 
         {categories.map((category, index) => (
           <div key={index} className="section">
-            {/* Category Header */}
             <div className="flex align-center gap-1 mb-2">
               <h3 className="m-0">{category}</h3>
               <span className={`badge ${images[category]?.length === 30 ? 'success' : 'neutral'}`}>
@@ -96,105 +150,24 @@ function CustomTraining() {
               </span>
             </div>
 
-            {/* Upload Button */}
-            <label className="file-upload-label">
-              📤 Upload Images
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                onChange={e => handleFileSelect(e, category)}
-                disabled={uploading}
-              />
-            </label>
-
-            {/* TODO: Display uploaded images as thumbnails */}
-            {/* HINT: Map over images[category] and show each image */}
-            {images[category]?.length > 0 && (
-              <div className="mt-2">
-                <p className="text-small text-muted">
-                  TODO: Display image thumbnails here
-                </p>
-              </div>
-            )}
+            {/* TODO SESSION-03: Display image thumbnails here */}
           </div>
         ))}
       </div>
 
-      {/* Instructions */}
+      {/* Training Section */}
       <div className="card">
-        <h3>📚 Instructions</h3>
-        <ol className="list-padded">
-          <li>
-            Open <code>src/training/CustomTraining.jsx</code>
-          </li>
-          <li>Complete the TODO to load images from training-library/cat and training-library/dog</li>
-          <li>Add code to display the loaded images</li>
-          <li>Complete the training function (Session 4)</li>
-          <li>Compare your model's accuracy to MobileNet</li>
-        </ol>
+        <h3>Model Training</h3>
 
-        <div className="alert info mt-2">
-          <strong>💡 Goal:</strong> Train a model that can classify cats vs dogs as accurately as
-          MobileNet. You have 30 images per category - is that enough?
-        </div>
+        {/* TODO SESSION-04: Add Train Model button here */}
+
+        {/* TODO SESSION-04: Add training progress display here */}
       </div>
 
-      {/* Extension */}
-      <div className="card">
-        <h3>🚀 Extension (Session 5-6)</h3>
-        <p>After mastering cat vs dog, choose your own categories:</p>
-        <ul className="list-padded">
-          <li><strong>Objects:</strong> car vs truck, phone vs tablet, book vs laptop</li>
-          <li><strong>Sports:</strong> basketball vs soccer ball, tennis vs baseball</li>
-          <li><strong>Nature:</strong> tree vs flower, mountain vs beach, sun vs moon</li>
-        </ul>
-        <p className="mt-2">
-          Collect 20-30 images per category and train a classifier for YOUR categories!
-        </p>
-      </div>
+      {/* Testing Section */}
+      {/* TODO SESSION-04: Add test UI here */}
 
-      {/* Resources for Extension */}
-      <div className="card">
-        <h3>🖼️ Free Image Resources (For Your Custom Categories)</h3>
-        <p>When you're ready to train on your own categories, use these sources:</p>
-        <ul className="list-padded">
-          <li>
-            <a href="https://unsplash.com" target="_blank" rel="noopener noreferrer">
-              Unsplash
-            </a>{' '}
-            - High-quality photos
-          </li>
-          <li>
-            <a href="https://www.pexels.com" target="_blank" rel="noopener noreferrer">
-              Pexels
-            </a>{' '}
-            - Free stock photos
-          </li>
-          <li>
-            <a href="https://pixabay.com" target="_blank" rel="noopener noreferrer">
-              Pixabay
-            </a>{' '}
-            - Free images and videos
-          </li>
-          <li>
-            <a
-              href="https://www.kaggle.com/datasets"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Kaggle Datasets
-            </a>{' '}
-            - Pre-organized datasets
-          </li>
-          <li>
-            <a href="https://commons.wikimedia.org" target="_blank" rel="noopener noreferrer">
-              Wikimedia Commons
-            </a>{' '}
-            - Public domain images
-          </li>
-        </ul>
-      </div>
+      {/* TODO SESSION-04: Add ConfidenceVisualizer here */}
     </div>
   );
 }
