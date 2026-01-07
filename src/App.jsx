@@ -17,7 +17,7 @@ function App() {
           className={`tab ${activeTab === 'prebuilt' ? 'active' : ''}`}
           onClick={() => setActiveTab('prebuilt')}
         >
-          Pre-built Training
+          Pre-built Classifier
         </button>
         <button
           className={`tab ${activeTab === 'custom' ? 'active' : ''}`}
