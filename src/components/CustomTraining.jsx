@@ -12,6 +12,7 @@ function CustomTraining() {
   const [progress, setProgress] = useState({ epoch: 0, loss: 0, accuracy: 0 });
   const [prediction, setPrediction] = useState(null);
   const [testImageUrl, setTestImageUrl] = useState('');
+  const [uploading, setUploading] = useState(false);
 
   // Helper: Load an image from URL (PROVIDED)
   async function loadImage(imagePath) {
@@ -47,6 +48,21 @@ function CustomTraining() {
     });
     
     return model;
+  }
+
+  // SESSION-05: Students add image upload logic
+  async function uploadImages(files, category) {
+    setUploading(true);
+    console.log(`Uploading ${files.length} images to ${category}...`);
+
+    try {
+      console.log('✅ Upload complete!');
+    } catch (error) {
+      console.error('Upload failed:', error);
+      alert('Failed to upload images. Check console for details.');
+    }
+
+    setUploading(false);
   }
 
   // SESSION-03: Students add image loading logic
@@ -104,6 +120,22 @@ function CustomTraining() {
     console.log('Classifying image...');
   }
 
+  // SESSION-05: Students add batch testing logic
+  async function batchTestCustomModel(imageUrls, category) {
+    if (!model) {
+      alert('Train the model first!');
+      return;
+    }
+
+    console.log(`\n=== Testing ${imageUrls.length} ${category} images ===`);
+
+    try {
+      console.log('Batch test complete!');
+    } catch (error) {
+      console.error('Batch test failed:', error);
+    }
+  }
+
   const allImages = { cat: catImages, dog: dogImages };
 
   return (
@@ -126,6 +158,28 @@ function CustomTraining() {
         >
           {catImages.length > 0 ? '✅ Images Loaded' : 'Load Training Images'}
         </button>
+
+        <div className="mb-3">
+          <h4>Upload Custom Images (Optional)</h4>
+          <p className="text-muted text-small mb-2">
+            Upload your own images to train on custom categories
+          </p>
+          
+          {categories.map((category) => (
+            <div key={category} className="mb-2">
+              <label className="file-upload-label">
+                Upload {category} images
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={(e) => uploadImages(Array.from(e.target.files), category)}
+                  disabled={uploading}
+                />
+              </label>
+            </div>
+          ))}
+        </div>
 
         {categories.map((category, index) => {
           const images = allImages[category];
@@ -177,22 +231,56 @@ function CustomTraining() {
         <div className="card">
           <h3>Test Your Model</h3>
           
-          <div className="flex flex-gap mb-2">
-            <input
-              type="text"
-              className="input flex-1"
-              placeholder="https://example.com/image.jpg"
-              value={testImageUrl}
-              onChange={(e) => setTestImageUrl(e.target.value)}
-            />
-            <button className="btn primary" onClick={classifyImage}>
-              Test
-            </button>
+          <div className="mb-3">
+            <h4>Single Image Test</h4>
+            <div className="flex flex-gap mb-2">
+              <input
+                type="text"
+                className="input flex-1"
+                placeholder="https://example.com/image.jpg"
+                value={testImageUrl}
+                onChange={(e) => setTestImageUrl(e.target.value)}
+              />
+              <button className="btn primary" onClick={classifyImage}>
+                Test
+              </button>
+            </div>
+            
+            <p className="text-small text-muted">
+              Try: https://cdn.wizcamp.io/images/team/dooder.jpg
+            </p>
           </div>
-          
-          <p className="text-small text-muted">
-            Try: https://cdn.wizcamp.io/images/team/dooder.jpg
-          </p>
+
+          <div className="mb-3">
+            <h4>Batch Testing</h4>
+            <p className="text-muted text-small mb-2">
+              Test your custom model on multiple images
+            </p>
+            <div className="flex flex-gap">
+              <button 
+                className="btn secondary" 
+                onClick={() => {
+                  const urls = Array.from({length: 30}, (_, i) => 
+                    `/training-library/cat/cat-${String(i + 1).padStart(2, '0')}.jpg`
+                  );
+                  batchTestCustomModel(urls, 'cat');
+                }}
+              >
+                Test 30 Cats
+              </button>
+              <button 
+                className="btn secondary" 
+                onClick={() => {
+                  const urls = Array.from({length: 30}, (_, i) => 
+                    `/training-library/dog/dog-${String(i + 1).padStart(2, '0')}.jpg`
+                  );
+                  batchTestCustomModel(urls, 'dog');
+                }}
+              >
+                Test 30 Dogs
+              </button>
+            </div>
+          </div>
 
           <ConfidenceVisualizer prediction={prediction} />
         </div>
