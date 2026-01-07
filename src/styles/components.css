@@ -30,6 +30,12 @@
   color: #065f46;
 }
 
+.prediction-label {
+  font-weight: bold;
+  font-size: 1.25rem;
+  color: #065f46;
+}
+
 .alert.warning {
   background: #fef3c7;
   border-left: 4px solid #f59e0b;
