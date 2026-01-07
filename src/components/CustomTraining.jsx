@@ -4,20 +4,16 @@ import * as mobilenet from '@tensorflow-models/mobilenet';
 import ConfidenceVisualizer from './ConfidenceVisualizer';
 
 function CustomTraining() {
-  const [categories, setCategories] = useState(['cat', 'dog']);
-  const [images, setImages] = useState({ cat: [], dog: [] });
+  const [categories] = useState(['cat', 'dog']);
+  const [catImages, setCatImages] = useState([]);
+  const [dogImages, setDogImages] = useState([]);
   const [model, setModel] = useState(null);
   const [training, setTraining] = useState(false);
-  const [trainingProgress, setTrainingProgress] = useState({ epoch: 0, loss: 0, accuracy: 0 });
+  const [progress, setProgress] = useState({ epoch: 0, loss: 0, accuracy: 0 });
   const [prediction, setPrediction] = useState(null);
+  const [testImageUrl, setTestImageUrl] = useState('');
 
-  // TODO SESSION-03: Complete this function to load training images
-  async function loadTrainingImages() {
-    // YOUR CODE HERE
-    console.log('TODO: Load training images');
-  }
-
-  // Helper function to load an image (PROVIDED)
+  // Helper: Load an image from URL (PROVIDED)
   async function loadImage(imagePath) {
     return new Promise((resolve) => {
       const img = new Image();
@@ -27,85 +23,64 @@ function CustomTraining() {
     });
   }
 
-  // TODO SESSION-04: Complete this function to convert images to tensors
-  async function createTrainingData() {
-    console.log('Creating training data...');
-    
-    const xs = []; // Features (images)
-    const ys = []; // Labels (0=cat, 1=dog)
-    
-    // Load MobileNet for feature extraction
-    const mobilenetModel = await mobilenet.load();
-    
-    // TODO: Process cat images (label = 0)
-    // YOUR CODE HERE
-    
-    // TODO: Process dog images (label = 1)
-    // YOUR CODE HERE
-    
-    // Convert to tensors
-    const xsTensor = tf.stack(xs);
-    const ysTensor = tf.oneHot(tf.tensor1d(ys, 'int32'), 2);
-    
-    // Clean up
-    xs.forEach(x => x.dispose());
-    
-    console.log('✅ Training data created');
-    return { xs: xsTensor, ys: ysTensor };
-  }
-
-  // Model architecture (PROVIDED - from SESSION-03)
+  // Helper: Create model architecture (PROVIDED)
   function createModel() {
     const model = tf.sequential();
     
-    // Dense layer with 128 neurons
     model.add(tf.layers.dense({
-      inputShape: [1024], // MobileNet feature size
+      inputShape: [1024],
       units: 128,
       activation: 'relu'
     }));
     
-    // Dropout for regularization
     model.add(tf.layers.dropout({ rate: 0.5 }));
     
-    // Output layer (2 classes: cat, dog)
     model.add(tf.layers.dense({
       units: 2,
       activation: 'softmax'
     }));
     
-    // Compile model
     model.compile({
       optimizer: tf.train.adam(0.001),
       loss: 'categoricalCrossentropy',
       metrics: ['accuracy']
     });
     
-    console.log('✅ Model architecture created');
     return model;
   }
 
-  // TODO SESSION-04: Complete this function to train the model
+  // SESSION-03: Students add image loading logic
+  async function loadTrainingImages() {
+    console.log('Loading training images...');
+  }
+
+  // SESSION-04: Students add tensor creation logic
+  async function createTrainingData() {
+    console.log('Creating training data...');
+    
+    const imageFeatures = [];
+    const imageLabels = [];
+    
+    const mobilenetModel = await mobilenet.load();
+    
+    return { features: null, labels: null };
+  }
+
+  // SESSION-04: Students add training logic
   async function trainModel() {
+    if (catImages.length === 0 || dogImages.length === 0) {
+      alert('Load training images first!');
+      return;
+    }
+
     setTraining(true);
     
     try {
-      // Create training data
-      const { xs, ys } = await createTrainingData();
-      
-      // Create model
+      const trainingData = await createTrainingData();
       const trainedModel = createModel();
-      
-      // TODO: Add training code here
-      // YOUR CODE HERE
       
       setModel(trainedModel);
       console.log('✅ Training complete!');
-      
-      // Clean up
-      xs.dispose();
-      ys.dispose();
-      
     } catch (error) {
       console.error('Training error:', error);
       alert('Training failed. Check console for details.');
@@ -114,16 +89,22 @@ function CustomTraining() {
     setTraining(false);
   }
 
-  // TODO SESSION-04: Complete this function to classify images
-  async function classifyWithCustomModel(imageUrl) {
+  // SESSION-04: Students add classification logic
+  async function classifyImage() {
     if (!model) {
       alert('Train the model first!');
       return;
     }
 
-    // TODO: Add classification code here
-    // YOUR CODE HERE
+    if (!testImageUrl.trim()) {
+      alert('Enter an image URL first!');
+      return;
+    }
+
+    console.log('Classifying image...');
   }
+
+  const allImages = { cat: catImages, dog: dogImages };
 
   return (
     <div>
@@ -135,39 +116,87 @@ function CustomTraining() {
         </p>
       </div>
 
-      {/* Training Categories */}
       <div className="card">
-        <h3>Training Categories</h3>
+        <h3>Training Images</h3>
+        
+        <button 
+          className="btn primary mb-3" 
+          onClick={loadTrainingImages}
+          disabled={catImages.length > 0}
+        >
+          {catImages.length > 0 ? '✅ Images Loaded' : 'Load Training Images'}
+        </button>
 
-        {/* TODO SESSION-03: Add Load Training Images button here */}
+        {categories.map((category, index) => {
+          const images = allImages[category];
+          return (
+            <div key={index} className="section">
+              <div className="flex align-center gap-1 mb-2">
+                <h3 className="m-0">{category}</h3>
+                <span className={`badge ${images.length === 30 ? 'success' : 'neutral'}`}>
+                  {images.length} / 30 images
+                </span>
+              </div>
 
-        {categories.map((category, index) => (
-          <div key={index} className="section">
-            <div className="flex align-center gap-1 mb-2">
-              <h3 className="m-0">{category}</h3>
-              <span className={`badge ${images[category]?.length === 30 ? 'success' : 'neutral'}`}>
-                {images[category]?.length || 0} / 30 images
-              </span>
+              <div className="image-grid">
+                {images.map((imagePath, imgIndex) => (
+                  <img
+                    key={imgIndex}
+                    src={imagePath}
+                    alt={`${category} ${imgIndex + 1}`}
+                    className="thumbnail"
+                  />
+                ))}
+              </div>
             </div>
-
-            {/* TODO SESSION-03: Display image thumbnails here */}
-          </div>
-        ))}
+          );
+        })}
       </div>
 
-      {/* Training Section */}
       <div className="card">
         <h3>Model Training</h3>
+        
+        <button 
+          className="btn primary mb-3" 
+          onClick={trainModel}
+          disabled={training || catImages.length === 0}
+        >
+          {training ? 'Training...' : model ? '✅ Model Trained' : 'Train Model'}
+        </button>
 
-        {/* TODO SESSION-04: Add Train Model button here */}
-
-        {/* TODO SESSION-04: Add training progress display here */}
+        {training && (
+          <div className="training-progress">
+            <p>Epoch: {progress.epoch} / 20</p>
+            <p>Loss: {progress.loss}</p>
+            <p>Accuracy: {progress.accuracy}%</p>
+          </div>
+        )}
       </div>
 
-      {/* Testing Section */}
-      {/* TODO SESSION-04: Add test UI here */}
+      {model && (
+        <div className="card">
+          <h3>Test Your Model</h3>
+          
+          <div className="flex flex-gap mb-2">
+            <input
+              type="text"
+              className="input flex-1"
+              placeholder="https://example.com/image.jpg"
+              value={testImageUrl}
+              onChange={(e) => setTestImageUrl(e.target.value)}
+            />
+            <button className="btn primary" onClick={classifyImage}>
+              Test
+            </button>
+          </div>
+          
+          <p className="text-small text-muted">
+            Try: https://cdn.wizcamp.io/images/team/dooder.jpg
+          </p>
 
-      {/* TODO SESSION-04: Add ConfidenceVisualizer here */}
+          <ConfidenceVisualizer prediction={prediction} />
+        </div>
+      )}
     </div>
   );
 }

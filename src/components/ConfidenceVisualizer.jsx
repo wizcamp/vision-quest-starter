@@ -2,7 +2,15 @@ function ConfidenceVisualizer({ prediction, label }) {
   if (!prediction) return null;
 
   const confidence = prediction.probability * 100;
-  const confidenceLevel = confidence > 80 ? 'high' : confidence > 50 ? 'medium' : 'low';
+  
+  let confidenceLevel;
+  if (confidence > 80) {
+    confidenceLevel = 'high';
+  } else if (confidence > 50) {
+    confidenceLevel = 'medium';
+  } else {
+    confidenceLevel = 'low';
+  }
 
   return (
     <div className="alert success">
