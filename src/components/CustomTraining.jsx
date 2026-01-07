@@ -4,7 +4,7 @@ import * as mobilenet from '@tensorflow-models/mobilenet';
 import ConfidenceVisualizer from './ConfidenceVisualizer';
 
 function CustomTraining() {
-  const [categories] = useState(['cat', 'dog']);
+  const [categories, setCategories] = useState(['cat', 'dog']);
   const [catImages, setCatImages] = useState([]);
   const [dogImages, setDogImages] = useState([]);
   const [model, setModel] = useState(null);
@@ -13,15 +13,20 @@ function CustomTraining() {
   const [prediction, setPrediction] = useState(null);
   const [testImageUrl, setTestImageUrl] = useState('');
   const [uploading, setUploading] = useState(false);
+  const [useSavedModel, setUseSavedModel] = useState(false);
 
   // Helper: Load an image from URL (PROVIDED)
   async function loadImage(imagePath) {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => resolve(img);
-      img.src = imagePath;
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = imagePath;
+    
+    await new Promise((resolve, reject) => {
+      img.onload = resolve;
+      img.onerror = reject;
     });
+    
+    return img;
   }
 
   // Helper: Create model architecture (PROVIDED)
@@ -48,6 +53,31 @@ function CustomTraining() {
     });
     
     return model;
+  }
+
+  // SESSION-05: Students add model save logic
+  async function saveModel() {
+    if (!model) {
+      alert('Train a model first!');
+      return;
+    }
+
+    try {
+      console.log('Model saved to downloads!');
+    } catch (error) {
+      console.error('Save failed:', error);
+      alert('Failed to save model. Check console for details.');
+    }
+  }
+
+  // SESSION-05: Students add model load logic
+  async function loadSavedModel() {
+    try {
+      console.log('✅ Saved model loaded!');
+    } catch (error) {
+      console.error('Load failed:', error);
+      alert('Failed to load saved model. Check console for details.');
+    }
   }
 
   // SESSION-05: Students add image upload logic
@@ -210,20 +240,55 @@ function CustomTraining() {
       <div className="card">
         <h3>Model Training</h3>
         
-        <button 
-          className="btn primary mb-3" 
-          onClick={trainModel}
-          disabled={training || catImages.length === 0}
-        >
-          {training ? 'Training...' : model ? '✅ Model Trained' : 'Train Model'}
-        </button>
+        <div className="mb-3">
+          <label className="flex align-center gap-1">
+            <input
+              type="checkbox"
+              checked={useSavedModel}
+              onChange={(e) => setUseSavedModel(e.target.checked)}
+            />
+            <span>Use saved model (skip training)</span>
+          </label>
+          <p className="text-small text-muted mt-05">
+            Load a previously trained model from saved-models/custom/
+          </p>
+        </div>
 
-        {training && (
-          <div className="training-progress">
-            <p>Epoch: {progress.epoch} / 20</p>
-            <p>Loss: {progress.loss}</p>
-            <p>Accuracy: {progress.accuracy}%</p>
-          </div>
+        {useSavedModel ? (
+          <button 
+            className="btn primary mb-3" 
+            onClick={loadSavedModel}
+            disabled={model}
+          >
+            {model ? '✅ Model Loaded' : 'Load Saved Model'}
+          </button>
+        ) : (
+          <>
+            <button 
+              className="btn primary mb-3" 
+              onClick={trainModel}
+              disabled={training || catImages.length === 0}
+            >
+              {training ? 'Training...' : model ? '✅ Model Trained' : 'Train Model'}
+            </button>
+
+            {training && (
+              <div className="training-progress">
+                <p>Epoch: {progress.epoch} / 20</p>
+                <p>Loss: {progress.loss}</p>
+                <p>Accuracy: {progress.accuracy}%</p>
+              </div>
+            )}
+
+            {model && (
+              <button 
+                className="btn secondary mb-3" 
+                onClick={saveModel}
+              >
+                💾 Save Model for Deployment
+              </button>
+            )}
+          </>
         )}
       </div>
 
