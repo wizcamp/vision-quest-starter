@@ -41,7 +41,7 @@ function PrebuiltClassifier() {
   }
 
   // SESSION-01: Students add classification logic
-  async function classifyImage(imageElement) {
+  async function classifyImage(img) {
     if (!model) {
       alert('Please load the model first!');
       return;
