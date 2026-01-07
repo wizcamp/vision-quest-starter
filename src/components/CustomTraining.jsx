@@ -312,7 +312,7 @@ function CustomTraining() {
             </div>
             
             <p className="text-small text-muted">
-              Try: https://cdn.wizcamp.io/images/team/dooder.jpg
+              Try: https://images.unsplash.com/photo-1574158622682-e40e69881006?w=800
             </p>
           </div>
 
