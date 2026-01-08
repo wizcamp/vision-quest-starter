@@ -1,4 +1,3 @@
 {
-  "categories": ["cat", "dog"],
-  "description": "Replace this file with your custom categories after training"
+  "categories": ["cat", "dog"]
 }

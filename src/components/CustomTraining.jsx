@@ -29,6 +29,12 @@ function CustomTraining() {
     return img;
   }
 
+  // SESSION-02: Students add image path generation logic
+  function generateImagePaths(category, count) {
+    const paths = [];
+    return paths;
+  }
+
   // Helper: Create model architecture (PROVIDED)
   function createModel() {
     const model = tf.sequential();
@@ -63,7 +69,19 @@ function CustomTraining() {
     }
 
     try {
-      console.log('Model saved to downloads!');
+      await model.save('downloads://vision-quest-model');
+      
+      const data = JSON.stringify({ categories }, null, 2);
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'categories.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      console.log('✅ Model saved to downloads!');
+      alert('Model saved! Check your Downloads folder for model files and categories.json');
     } catch (error) {
       console.error('Save failed:', error);
       alert('Failed to save model. Check console for details.');
@@ -73,10 +91,18 @@ function CustomTraining() {
   // SESSION-05: Students add model load logic
   async function loadSavedModel() {
     try {
+      const model = await tf.loadLayersModel('/saved-models/custom/model.json');
+      setModel(model);
+      
+      const response = await fetch('/saved-models/custom/categories.json');
+      const data = await response.json();
+      setCategories(data.categories);
+      
       console.log('✅ Saved model loaded!');
+      alert('Saved model loaded successfully!');
     } catch (error) {
       console.error('Load failed:', error);
-      alert('Failed to load saved model. Check console for details.');
+      alert('Failed to load saved model. Make sure model files are in public/saved-models/custom/');
     }
   }
 
@@ -95,24 +121,24 @@ function CustomTraining() {
     setUploading(false);
   }
 
-  // SESSION-03: Students add image loading logic
-  async function loadTrainingImages() {
+  // SESSION-02: Students add path generation logic
+  function loadTrainingImages() {
     console.log('Loading training images...');
   }
 
-  // SESSION-04: Students add tensor creation logic
+  // SESSION-03: Students add tensor creation logic
   async function createTrainingData() {
     console.log('Creating training data...');
     
-    const imageFeatures = [];
-    const imageLabels = [];
+    const features = [];
+    const labels = [];
     
-    const mobilenetModel = await mobilenet.load();
+    const mobilenet = await mobilenet.load();
     
     return { features: null, labels: null };
   }
 
-  // SESSION-04: Students add training logic
+  // SESSION-03: Students add training logic
   async function trainModel() {
     if (catImages.length === 0 || dogImages.length === 0) {
       alert('Load training images first!');
@@ -122,10 +148,10 @@ function CustomTraining() {
     setTraining(true);
     
     try {
-      const trainingData = await createTrainingData();
-      const trainedModel = createModel();
+      const data = await createTrainingData();
+      const model = createModel();
       
-      setModel(trainedModel);
+      setModel(model);
       console.log('✅ Training complete!');
     } catch (error) {
       console.error('Training error:', error);
@@ -135,7 +161,7 @@ function CustomTraining() {
     setTraining(false);
   }
 
-  // SESSION-04: Students add classification logic
+  // SESSION-03: Students add classification logic
   async function classifyImage() {
     if (!model) {
       alert('Train the model first!');
@@ -148,6 +174,29 @@ function CustomTraining() {
     }
 
     console.log('Classifying image...');
+    
+    try {
+      const img = await loadImage(testImageUrl);
+      const mobilenet = await mobilenet.load();
+      const features = mobilenet.infer(img, true);
+      
+      const prediction = model.predict(features.expandDims(0));
+      const probabilities = await prediction.data();
+      
+      const result = {
+        className: probabilities[0] > probabilities[1] ? categories[0] : categories[1],
+        probability: Math.max(probabilities[0], probabilities[1])
+      };
+      
+      setPrediction(result);
+      console.log('Prediction:', result);
+      
+      features.dispose();
+      prediction.dispose();
+    } catch (error) {
+      console.error('Classification error:', error);
+      alert('Failed to classify image. Check console for details.');
+    }
   }
 
   // SESSION-05: Students add batch testing logic

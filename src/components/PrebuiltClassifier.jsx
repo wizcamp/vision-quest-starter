@@ -60,26 +60,6 @@ function PrebuiltClassifier() {
     setLoading(false);
   }
 
-  // SESSION-02: Students add batch testing logic
-  async function batchTest(imageUrls, category) {
-    if (!model) {
-      alert('Please load the model first!');
-      return;
-    }
-
-    console.log(`\n=== Testing ${imageUrls.length} ${category} images ===`);
-    
-    setLoading(true);
-
-    try {
-      console.log('Batch test complete!');
-    } catch (error) {
-      console.error('Batch test failed:', error);
-    }
-
-    setLoading(false);
-  }
-
   // Handle image upload
   async function handleImageUpload(event) {
     const file = event.target.files[0];
@@ -163,39 +143,6 @@ function PrebuiltClassifier() {
                   disabled={loading}
                 />
               </label>
-            </div>
-
-            <div className="mt-3">
-              <h3>Batch Testing</h3>
-              <p className="text-muted mb-1">
-                Test multiple images automatically and calculate accuracy
-              </p>
-              <div className="flex flex-gap">
-                <button 
-                  className="btn secondary" 
-                  onClick={() => {
-                    const urls = Array.from({length: 30}, (_, i) => 
-                      `/training-library/cat/cat-${String(i + 1).padStart(2, '0')}.jpg`
-                    );
-                    batchTest(urls, 'cat');
-                  }}
-                  disabled={loading}
-                >
-                  Test 30 Cats
-                </button>
-                <button 
-                  className="btn secondary" 
-                  onClick={() => {
-                    const urls = Array.from({length: 30}, (_, i) => 
-                      `/training-library/dog/dog-${String(i + 1).padStart(2, '0')}.jpg`
-                    );
-                    batchTest(urls, 'dog');
-                  }}
-                  disabled={loading}
-                >
-                  Test 30 Dogs
-                </button>
-              </div>
             </div>
           </div>
         )}
