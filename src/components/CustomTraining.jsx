@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import * as tf from '@tensorflow/tfjs';
 import * as mobilenet from '@tensorflow-models/mobilenet';
 import ConfidenceVisualizer from './ConfidenceVisualizer';
@@ -29,12 +29,6 @@ function CustomTraining() {
     return img;
   }
 
-  // SESSION-02: Students add image path generation logic
-  function generateImagePaths(category, count) {
-    const paths = [];
-    return paths;
-  }
-
   // Helper: Create model architecture (PROVIDED)
   function createModel() {
     const model = tf.sequential();
@@ -61,67 +55,29 @@ function CustomTraining() {
     return model;
   }
 
-  // SESSION-05: Students add model save logic
-  async function saveModel() {
-    if (!model) {
-      alert('Train a model first!');
-      return;
+  // Training configuration (PROVIDED)
+  const trainingConfig = useMemo(() => ({
+    epochs: 20,
+    batchSize: 8,
+    validationSplit: 0.2,
+    callbacks: {
+      onEpochEnd: (epoch, logs) => {
+        setProgress({
+          epoch: epoch + 1,
+          loss: logs.loss.toFixed(4),
+          accuracy: (logs.acc * 100).toFixed(1)
+        });
+      }
     }
+  }), []);
 
-    try {
-      await model.save('downloads://vision-quest-model');
-      
-      const data = JSON.stringify({ categories }, null, 2);
-      const blob = new Blob([data], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'categories.json';
-      a.click();
-      URL.revokeObjectURL(url);
-      
-      console.log('✅ Model saved to downloads!');
-      alert('Model saved! Check your Downloads folder for model files and categories.json');
-    } catch (error) {
-      console.error('Save failed:', error);
-      alert('Failed to save model. Check console for details.');
-    }
+  // SESSION-02: Students add image path generation logic
+  function generateImagePaths(category, count) {
+    const paths = [];
+    return paths;
   }
 
-  // SESSION-05: Students add model load logic
-  async function loadSavedModel() {
-    try {
-      const model = await tf.loadLayersModel('/saved-models/custom/model.json');
-      setModel(model);
-      
-      const response = await fetch('/saved-models/custom/categories.json');
-      const data = await response.json();
-      setCategories(data.categories);
-      
-      console.log('✅ Saved model loaded!');
-      alert('Saved model loaded successfully!');
-    } catch (error) {
-      console.error('Load failed:', error);
-      alert('Failed to load saved model. Make sure model files are in public/saved-models/custom/');
-    }
-  }
-
-  // SESSION-05: Students add image upload logic
-  async function uploadImages(files, category) {
-    setUploading(true);
-    console.log(`Uploading ${files.length} images to ${category}...`);
-
-    try {
-      console.log('✅ Upload complete!');
-    } catch (error) {
-      console.error('Upload failed:', error);
-      alert('Failed to upload images. Check console for details.');
-    }
-
-    setUploading(false);
-  }
-
-  // SESSION-02: Students add path generation logic
+  // SESSION-02: Students add loading logic
   function loadTrainingImages() {
     console.log('Loading training images...');
   }
@@ -196,6 +152,66 @@ function CustomTraining() {
     } catch (error) {
       console.error('Classification error:', error);
       alert('Failed to classify image. Check console for details.');
+    }
+  }
+
+  // SESSION-05: Students add image upload logic
+  async function uploadImages(files, category) {
+    setUploading(true);
+    console.log(`Uploading ${files.length} images to ${category}...`);
+
+    try {
+      console.log('✅ Upload complete!');
+    } catch (error) {
+      console.error('Upload failed:', error);
+      alert('Failed to upload images. Check console for details.');
+    }
+
+    setUploading(false);
+  }
+
+  // SESSION-05: Students add model save logic
+  async function saveModel() {
+    if (!model) {
+      alert('Train a model first!');
+      return;
+    }
+
+    try {
+      await model.save('downloads://vision-quest-model');
+      
+      const data = JSON.stringify({ categories }, null, 2);
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'categories.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      console.log('✅ Model saved to downloads!');
+      alert('Model saved! Check your Downloads folder for model files and categories.json');
+    } catch (error) {
+      console.error('Save failed:', error);
+      alert('Failed to save model. Check console for details.');
+    }
+  }
+
+  // SESSION-05: Students add model load logic
+  async function loadSavedModel() {
+    try {
+      const model = await tf.loadLayersModel('/saved-models/custom/model.json');
+      setModel(model);
+      
+      const response = await fetch('/saved-models/custom/categories.json');
+      const data = await response.json();
+      setCategories(data.categories);
+      
+      console.log('✅ Saved model loaded!');
+      alert('Saved model loaded successfully!');
+    } catch (error) {
+      console.error('Load failed:', error);
+      alert('Failed to load saved model. Make sure model files are in public/saved-models/custom/');
     }
   }
 
