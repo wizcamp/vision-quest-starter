@@ -5,8 +5,7 @@ import ConfidenceVisualizer from './ConfidenceVisualizer';
 
 function CustomTraining() {
   const [categories, setCategories] = useState(['cat', 'dog']);
-  const [catImages, setCatImages] = useState([]);
-  const [dogImages, setDogImages] = useState([]);
+  const [trainingImages, setTrainingImages] = useState({});
   const [model, setModel] = useState(null);
   const [training, setTraining] = useState(false);
   const [progress, setProgress] = useState({ epoch: 0, loss: 0, accuracy: 0 });
@@ -80,6 +79,17 @@ function CustomTraining() {
   // SESSION-02: Students add loading logic
   function loadTrainingImages() {
     console.log('Loading training images...');
+    
+    const images = {};
+    
+    for (const category of categories) {
+      images[category] = generateImagePaths(category, 30);
+    }
+    
+    setTrainingImages(images);
+    
+    const total = categories.length * 30;
+    console.log(`✅ Loaded ${total} training images`);
   }
 
   // SESSION-03: Students add tensor creation logic
@@ -89,14 +99,17 @@ function CustomTraining() {
     const features = [];
     const labels = [];
     
-    const mobilenet = await mobilenet.load();
+    const net = await mobilenet.load();
     
     return { features: null, labels: null };
   }
 
   // SESSION-03: Students add training logic
   async function trainModel() {
-    if (catImages.length === 0 || dogImages.length === 0) {
+    const hasAllImages = categories.every(
+      cat => trainingImages[cat]?.length > 0
+    );
+    if (!hasAllImages) {
       alert('Load training images first!');
       return;
     }
@@ -133,8 +146,8 @@ function CustomTraining() {
     
     try {
       const img = await loadImage(testImageUrl);
-      const mobilenet = await mobilenet.load();
-      const features = mobilenet.infer(img, true);
+      const net = await mobilenet.load();
+      const features = net.infer(img, true).squeeze();
       
       const prediction = model.predict(features.expandDims(0));
       const probabilities = await prediction.data();
@@ -231,7 +244,7 @@ function CustomTraining() {
     }
   }
 
-  const allImages = { cat: catImages, dog: dogImages };
+  const hasImages = categories.some(cat => trainingImages[cat]?.length > 0);
 
   return (
     <div>
@@ -249,9 +262,9 @@ function CustomTraining() {
         <button 
           className="btn primary mb-3" 
           onClick={loadTrainingImages}
-          disabled={catImages.length > 0}
+          disabled={hasImages}
         >
-          {catImages.length > 0 ? '✅ Images Loaded' : 'Load Training Images'}
+          {hasImages ? '✅ Images Loaded' : 'Load Training Images'}
         </button>
 
         <div className="mb-3">
@@ -277,7 +290,7 @@ function CustomTraining() {
         </div>
 
         {categories.map((category, index) => {
-          const images = allImages[category];
+          const images = trainingImages[category] || [];
           return (
             <div key={index} className="section">
               <div className="flex align-center gap-1 mb-2">
@@ -332,7 +345,7 @@ function CustomTraining() {
             <button 
               className="btn primary mb-3" 
               onClick={trainModel}
-              disabled={training || catImages.length === 0}
+              disabled={training || !hasImages}
             >
               {training ? 'Training...' : model ? '✅ Model Trained' : 'Train Model'}
             </button>
@@ -387,28 +400,20 @@ function CustomTraining() {
               Test your custom model on multiple images
             </p>
             <div className="flex flex-gap">
-              <button 
-                className="btn secondary" 
-                onClick={() => {
-                  const urls = Array.from({length: 30}, (_, i) => 
-                    `/training-library/cat/cat-${String(i + 1).padStart(2, '0')}.jpg`
-                  );
-                  batchTestCustomModel(urls, 'cat');
-                }}
-              >
-                Test 30 Cats
-              </button>
-              <button 
-                className="btn secondary" 
-                onClick={() => {
-                  const urls = Array.from({length: 30}, (_, i) => 
-                    `/training-library/dog/dog-${String(i + 1).padStart(2, '0')}.jpg`
-                  );
-                  batchTestCustomModel(urls, 'dog');
-                }}
-              >
-                Test 30 Dogs
-              </button>
+              {categories.map((category) => (
+                <button 
+                  key={category}
+                  className="btn secondary" 
+                  onClick={() => {
+                    const urls = Array.from({length: 30}, (_, i) => 
+                      `/training-library/${category}/${category}-${String(i + 1).padStart(2, '0')}.jpg`
+                    );
+                    batchTestCustomModel(urls, category);
+                  }}
+                >
+                  Test 30 {category}s
+                </button>
+              ))}
             </div>
           </div>
 
