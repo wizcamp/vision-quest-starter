@@ -11,6 +11,7 @@ function CustomTraining() {
   const [progress, setProgress] = useState({ epoch: 0, loss: 0, accuracy: 0 });
   const [prediction, setPrediction] = useState(null);
   const [testImageUrl, setTestImageUrl] = useState('');
+  const [imagePreview, setImagePreview] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [useSavedModel, setUseSavedModel] = useState(false);
 
@@ -79,17 +80,6 @@ function CustomTraining() {
   // SESSION-02: Students add loading logic
   function loadTrainingImages() {
     console.log('Loading training images...');
-    
-    const images = {};
-    
-    for (const category of categories) {
-      images[category] = generateImagePaths(category, 30);
-    }
-    
-    setTrainingImages(images);
-    
-    const total = categories.length * 30;
-    console.log(`✅ Loaded ${total} training images`);
   }
 
   // SESSION-03: Students add tensor creation logic
@@ -130,22 +120,20 @@ function CustomTraining() {
     setTraining(false);
   }
 
-  // SESSION-03: Students add classification logic
-  async function classifyImage() {
+  // Classification logic (PROVIDED)
+  async function classifyImage(imageSource) {
     if (!model) {
       alert('Train the model first!');
-      return;
-    }
-
-    if (!testImageUrl.trim()) {
-      alert('Enter an image URL first!');
       return;
     }
 
     console.log('Classifying image...');
     
     try {
-      const img = await loadImage(testImageUrl);
+      const img = typeof imageSource === 'string' 
+        ? await loadImage(imageSource)
+        : imageSource;
+      
       const net = await mobilenet.load();
       const features = net.infer(img, true).squeeze();
       
@@ -166,6 +154,32 @@ function CustomTraining() {
       console.error('Classification error:', error);
       alert('Failed to classify image. Check console for details.');
     }
+  }
+
+  // Handle image from URL (PROVIDED)
+  async function handleImageUrl() {
+    if (!testImageUrl.trim()) {
+      alert('Enter an image URL first!');
+      return;
+    }
+
+    setImagePreview(testImageUrl);
+    await classifyImage(testImageUrl);
+  }
+
+  // Handle image upload (PROVIDED)
+  async function handleImageUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const imageUrl = URL.createObjectURL(file);
+    setImagePreview(imageUrl);
+    
+    const img = new Image();
+    img.onload = () => {
+      classifyImage(img);
+    };
+    img.src = imageUrl;
   }
 
   // SESSION-05: Students add image upload logic
@@ -225,22 +239,6 @@ function CustomTraining() {
     } catch (error) {
       console.error('Load failed:', error);
       alert('Failed to load saved model. Make sure model files are in public/saved-models/custom/');
-    }
-  }
-
-  // SESSION-05: Students add batch testing logic
-  async function batchTestCustomModel(imageUrls, category) {
-    if (!model) {
-      alert('Train the model first!');
-      return;
-    }
-
-    console.log(`\n=== Testing ${imageUrls.length} ${category} images ===`);
-
-    try {
-      console.log('Batch test complete!');
-    } catch (error) {
-      console.error('Batch test failed:', error);
     }
   }
 
@@ -376,46 +374,49 @@ function CustomTraining() {
           
           <div className="mb-3">
             <h4>Single Image Test</h4>
-            <div className="flex flex-gap mb-2">
-              <input
-                type="text"
-                className="input flex-1"
-                placeholder="https://example.com/image.jpg"
-                value={testImageUrl}
-                onChange={(e) => setTestImageUrl(e.target.value)}
-              />
-              <button className="btn primary" onClick={classifyImage}>
-                Test
-              </button>
-            </div>
             
-            <p className="text-small text-muted">
-              Try: https://images.unsplash.com/photo-1574158622682-e40e69881006?w=800
-            </p>
+            <div className="mb-2">
+              <p className="text-muted mb-1">Option 1: Use Image URL</p>
+              <div className="flex flex-gap">
+                <input
+                  type="text"
+                  className="input flex-1"
+                  placeholder="https://example.com/image.jpg"
+                  value={testImageUrl}
+                  onChange={(e) => setTestImageUrl(e.target.value)}
+                />
+                <button className="btn primary" onClick={handleImageUrl}>
+                  Test
+                </button>
+              </div>
+              <p className="text-small text-muted mt-05">
+                Try: https://images.unsplash.com/photo-1574158622682-e40e69881006?w=800
+              </p>
+            </div>
+
+            <div>
+              <p className="text-muted mb-1">Option 2: Upload from Computer</p>
+              <label className="file-upload-label">
+                Choose Image
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                />
+              </label>
+            </div>
           </div>
 
-          <div className="mb-3">
-            <h4>Batch Testing</h4>
-            <p className="text-muted text-small mb-2">
-              Test your custom model on multiple images
-            </p>
-            <div className="flex flex-gap">
-              {categories.map((category) => (
-                <button 
-                  key={category}
-                  className="btn secondary" 
-                  onClick={() => {
-                    const urls = Array.from({length: 30}, (_, i) => 
-                      `/training-library/${category}/${category}-${String(i + 1).padStart(2, '0')}.jpg`
-                    );
-                    batchTestCustomModel(urls, category);
-                  }}
-                >
-                  Test 30 {category}s
-                </button>
-              ))}
+          {imagePreview && (
+            <div className="mb-3">
+              <h3>Image:</h3>
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="image-preview"
+              />
             </div>
-          </div>
+          )}
 
           <ConfidenceVisualizer prediction={prediction} />
         </div>
