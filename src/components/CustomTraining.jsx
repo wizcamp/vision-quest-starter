@@ -12,7 +12,6 @@ function CustomTraining() {
   const [prediction, setPrediction] = useState(null);
   const [testImageUrl, setTestImageUrl] = useState('');
   const [imagePreview, setImagePreview] = useState(null);
-  const [uploading, setUploading] = useState(false);
   const [useSavedModel, setUseSavedModel] = useState(false);
 
   // Helper: Load an image from URL (PROVIDED)
@@ -163,6 +162,7 @@ function CustomTraining() {
       return;
     }
 
+    setPrediction(null);
     setImagePreview(testImageUrl);
     await classifyImage(testImageUrl);
   }
@@ -172,6 +172,7 @@ function CustomTraining() {
     const file = event.target.files[0];
     if (!file) return;
 
+    setPrediction(null);
     const imageUrl = URL.createObjectURL(file);
     setImagePreview(imageUrl);
     
@@ -180,40 +181,6 @@ function CustomTraining() {
       classifyImage(img);
     };
     img.src = imageUrl;
-  }
-
-  // Upload images to server (PROVIDED)
-  async function uploadImages(files, category) {
-    setUploading(true);
-    console.log(`Uploading ${files.length} images to ${category}...`);
-
-    try {
-      for (const file of files) {
-        const formData = new FormData();
-        formData.append('image', file);
-        formData.append('category', category);
-
-        const response = await fetch('http://localhost:3001/api/upload-image', {
-          method: 'POST',
-          body: formData
-        });
-
-        if (!response.ok) {
-          throw new Error(`Upload failed: ${response.statusText}`);
-        }
-      }
-
-      console.log('✅ Upload complete!');
-      alert(`Successfully uploaded ${files.length} images to ${category}`);
-      
-      // Reload training images to show newly uploaded ones
-      loadTrainingImages();
-    } catch (error) {
-      console.error('Upload failed:', error);
-      alert('Failed to upload images. Check console for details.');
-    }
-
-    setUploading(false);
   }
 
   // Save model to downloads (PROVIDED)
@@ -283,28 +250,6 @@ function CustomTraining() {
         >
           {hasImages ? '✅ Images Loaded' : 'Load Training Images'}
         </button>
-
-        <div className="mb-3">
-          <h4>Upload Custom Images (Optional)</h4>
-          <p className="text-muted text-small mb-2">
-            Upload your own images to train on custom categories
-          </p>
-          
-          {categories.map((category) => (
-            <div key={category} className="mb-2">
-              <label className="file-upload-label">
-                Upload {category} images
-                <input
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  onChange={(e) => uploadImages(Array.from(e.target.files), category)}
-                  disabled={uploading}
-                />
-              </label>
-            </div>
-          ))}
-        </div>
 
         {categories.map((category, index) => {
           const images = trainingImages[category] || [];
