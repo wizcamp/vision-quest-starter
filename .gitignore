@@ -19,8 +19,10 @@ dist-ssr/
 Thumbs.db
 
 # Custom training data (students' images)
-public/my-training-data/*
-!public/my-training-data/.gitkeep
+public/training-library/*
+!public/training-library/cat/
+!public/training-library/dog/
+!public/training-library/.gitkeep
 
 # Uploads temp folder
 uploads/

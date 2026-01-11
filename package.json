@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"vite\" \"node server/server.js\"",
-    "build": "vite build",
+    "build": "vite build --base=/vision-quest/",
     "preview": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

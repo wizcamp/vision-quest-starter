@@ -24,7 +24,7 @@ app.post('/api/upload-image', upload.single('image'), (req, res) => {
       return res.status(400).json({ error: 'Category is required' });
     }
     
-    const categoryPath = path.join(__dirname, '..', 'public', 'my-training-data', category);
+    const categoryPath = path.join(__dirname, '..', 'public', 'training-library', category);
     
     // Create category folder if needed
     if (!fs.existsSync(categoryPath)) {
@@ -50,7 +50,7 @@ app.get('/api/training-images/:category', (req, res) => {
       __dirname,
       '..',
       'public',
-      'my-training-data',
+      'training-library',
       req.params.category
     );
     
@@ -69,7 +69,7 @@ app.delete('/api/training-images/:category/:filename', (req, res) => {
       __dirname,
       '..',
       'public',
-      'my-training-data',
+      'training-library',
       req.params.category,
       req.params.filename
     );

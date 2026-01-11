@@ -182,13 +182,32 @@ function CustomTraining() {
     img.src = imageUrl;
   }
 
-  // SESSION-05: Students add image upload logic
+  // Upload images to server (PROVIDED)
   async function uploadImages(files, category) {
     setUploading(true);
     console.log(`Uploading ${files.length} images to ${category}...`);
 
     try {
+      for (const file of files) {
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('category', category);
+
+        const response = await fetch('http://localhost:3001/api/upload-image', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) {
+          throw new Error(`Upload failed: ${response.statusText}`);
+        }
+      }
+
       console.log('✅ Upload complete!');
+      alert(`Successfully uploaded ${files.length} images to ${category}`);
+      
+      // Reload training images to show newly uploaded ones
+      loadTrainingImages();
     } catch (error) {
       console.error('Upload failed:', error);
       alert('Failed to upload images. Check console for details.');
@@ -197,7 +216,7 @@ function CustomTraining() {
     setUploading(false);
   }
 
-  // SESSION-05: Students add model save logic
+  // Save model to downloads (PROVIDED)
   async function saveModel() {
     if (!model) {
       alert('Train a model first!');
@@ -205,7 +224,7 @@ function CustomTraining() {
     }
 
     try {
-      await model.save('downloads://vision-quest-model');
+      await model.save('downloads://custom-model');
       
       const data = JSON.stringify({ categories }, null, 2);
       const blob = new Blob([data], { type: 'application/json' });
