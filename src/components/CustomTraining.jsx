@@ -110,7 +110,7 @@ function CustomTraining() {
       const model = createModel();
       
       setModel(model);
-      console.log('✅ Training complete!');
+      console.log('Training complete!');
     } catch (error) {
       console.error('Training error:', error);
       alert('Training failed. Check console for details.');
@@ -202,7 +202,7 @@ function CustomTraining() {
       a.click();
       URL.revokeObjectURL(url);
       
-      console.log('✅ Model saved to downloads!');
+      console.log('Model saved to downloads!');
       alert('Model saved! Check your Downloads folder for model files and categories.json');
     } catch (error) {
       console.error('Save failed:', error);
@@ -220,7 +220,7 @@ function CustomTraining() {
       const data = await response.json();
       setCategories(data.categories);
       
-      console.log('✅ Saved model loaded!');
+      console.log('Saved model loaded!');
       alert('Saved model loaded successfully!');
     } catch (error) {
       console.error('Load failed:', error);

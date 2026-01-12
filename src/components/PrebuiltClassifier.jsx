@@ -31,7 +31,7 @@ function PrebuiltClassifier() {
     console.log('Loading model...');
     
     try {
-      console.log('✅ Model loaded successfully!');
+      console.log('Model loaded successfully!');
     } catch (error) {
       console.error('Error loading model:', error);
       alert('Failed to load model. Check console for details.');
