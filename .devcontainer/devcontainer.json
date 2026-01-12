@@ -7,7 +7,6 @@
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "GitHub.copilot",
-        "amazonwebservices.amazon-q-vscode",
         "gerane.theme-dark-dracula@0.0.5"
       ],
       "settings": {
@@ -17,9 +16,6 @@
           "source.fixAll.eslint": "explicit"
         },
         "eslint.validate": ["javascript", "javascriptreact"],
-        "amazonQ.telemetry": false,
-        "amazonQ.showInlineCodeSuggestionsWithCodeReferences": false,
-        "amazonQ.shareContentWithAWS": false,
         "github.copilot.enable": {
           "*": true
         },
@@ -28,15 +24,11 @@
       }
     }
   },
-  "forwardPorts": [5173, 3001],
+  "forwardPorts": [5173],
   "portsAttributes": {
     "5173": {
       "label": "Vite Dev Server",
       "onAutoForward": "notify"
-    },
-    "3001": {
-      "label": "Upload Server",
-      "onAutoForward": "silent"
     }
   },
   "postCreateCommand": "npm install",

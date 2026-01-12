@@ -62,14 +62,12 @@ vision-quest-starter/
 │   │   └── CustomTraining.jsx       # Session 3-4
 │   ├── App.jsx                # Main app with tabs
 │   └── main.jsx               # React entry point
-├── server/
-│   └── server.js              # Upload server (runs automatically)
 └── package.json
 ```
 
 ## 📦 Available Scripts
 
-- `npm run dev` - Start development (Vite + Express servers)
+- `npm run dev` - Start development server
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm run lint` - Check code for errors
@@ -94,7 +92,6 @@ See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
 - **Vite** - Build tool and dev server
 - **TensorFlow.js** - Machine learning library (runs in browser!)
 - **MobileNet** - Pre-trained image classification model
-- **Express** - Upload server for custom training (development only)
 
 ## 📖 Session Guides
 
@@ -138,16 +135,15 @@ Need images for training? Use these copyright-free sources:
 
 ### Port already in use
 ```bash
-# Kill processes on ports 5173 and 3001
-npx kill-port 5173 3001
+# Kill process on port 5173
+npx kill-port 5173
 npm run dev
 ```
 
 ### Images not uploading
-- Check that both servers are running (you should see two URLs in terminal)
-- Verify Express server is on port 3001
+- Ensure images are in the correct format (JPG, PNG)
 - Check browser console for errors
-- Ensure `public/my-training-data/` folder exists
+- Verify images are being loaded from the `public/` directory
 
 ### Model not loading
 - Check browser console for TensorFlow.js errors
