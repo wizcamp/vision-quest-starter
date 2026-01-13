@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="container">
       <header style={{ marginBottom: '2rem' }}>
-        <h1>🎯 Vision Quest</h1>
+        <h1>🤖 Vision Quest</h1>
         <p>Build your own AI-powered image classifier</p>
       </header>
 

@@ -16,7 +16,7 @@ This directory stores your trained custom models for deployment.
 saved-models/
 └── custom/
     ├── model.json          (model architecture + metadata)
-    ├── weights.bin         (trained weights)
+    ├── model.weights.bin   (trained weights)
     └── categories.json     (your category names)
 ```
 
