@@ -70,18 +70,19 @@ function CustomTraining() {
     }
   }), []);
 
-  // SESSION-02: Students add image path generation logic
+  // SESSION-02: Students generate array of image paths for a category
   function generateImagePaths(category, count) {
     const paths = [];
     return paths;
   }
 
-  // SESSION-02: Students add loading logic
+  // SESSION-02: Students loop through categories and generate paths for all images
   function loadTrainingImages() {
     console.log('Loading training images...');
   }
 
-  // SESSION-03: Students add tensor creation logic
+  // SESSION-03: Students extract features from images using MobileNet inference
+  // SESSION-03: Students create feature and label tensors for training
   async function createTrainingData() {
     console.log('Creating training data...');
     
@@ -93,7 +94,7 @@ function CustomTraining() {
     return { features: null, labels: null };
   }
 
-  // SESSION-03: Students add training logic
+  // SESSION-03: Students train model using fit() with training data and configuration
   async function trainModel() {
     const hasAllImages = categories.every(
       cat => trainingImages[cat]?.length > 0
@@ -210,7 +211,7 @@ function CustomTraining() {
     }
   }
 
-  // SESSION-05: Students add model load logic
+  // SESSION-05: Students load saved model and categories from public folder
   async function loadSavedModel() {
     try {
       const model = await tf.loadLayersModel('saved-models/custom/model.json');

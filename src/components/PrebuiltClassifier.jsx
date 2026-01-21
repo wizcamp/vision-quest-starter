@@ -25,7 +25,7 @@ function PrebuiltClassifier() {
     return img;
   }
 
-  // SESSION-01: Students add model loading logic
+  // SESSION-01: Students initialize TensorFlow backend and load MobileNet model
   async function loadModel() {
     setLoading(true);
     console.log('Loading model...');
@@ -40,7 +40,7 @@ function PrebuiltClassifier() {
     setLoading(false);
   }
 
-  // SESSION-01: Students add classification logic
+  // SESSION-01: Students get predictions from MobileNet and save to state
   async function classifyImage(img) {
     if (!model) {
       alert('Please load the model first!');
