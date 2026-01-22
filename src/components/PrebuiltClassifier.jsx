@@ -28,13 +28,13 @@ function PrebuiltClassifier() {
   // SESSION-01: Students initialize TensorFlow backend and load MobileNet model
   async function loadModel() {
     setLoading(true);
-    console.log('Loading model...');
+    console.log("Loading model...");
     
     try {
-      console.log('Model loaded successfully!');
+      console.log("Model loaded successfully!");
     } catch (error) {
-      console.error('Error loading model:', error);
-      alert('Failed to load model. Check console for details.');
+      console.error("Error loading model:", error);
+      alert("Failed to load model. Check console for details.");
     }
     
     setLoading(false);
@@ -43,18 +43,18 @@ function PrebuiltClassifier() {
   // SESSION-01: Students get predictions from MobileNet and save to state
   async function classifyImage(img) {
     if (!model) {
-      alert('Please load the model first!');
+      alert("Please load the model first!");
       return;
     }
 
     setLoading(true);
-    console.log('Classifying image...');
+    console.log("Classifying image...");
 
     try {
-      console.log('Classification complete');
+      console.log("Classification complete");
     } catch (error) {
-      console.error('Error classifying image:', error);
-      alert('Failed to classify image. Check console for details.');
+      console.error("Error classifying image:", error);
+      alert("Failed to classify image. Check console for details.");
     }
 
     setLoading(false);
@@ -78,7 +78,7 @@ function PrebuiltClassifier() {
   // Handle image from URL
   async function handleImageUrl() {
     if (!imageUrl.trim()) {
-      alert('Please enter an image URL');
+      alert("Please enter an image URL");
       return;
     }
 
@@ -87,7 +87,7 @@ function PrebuiltClassifier() {
       setImagePreview(imageUrl);
       classifyImage(img);
     } catch (error) {
-      alert('Failed to load image. Check the URL and try again.');
+      alert("Failed to load image. Check the URL and try again.");
     }
   }
 

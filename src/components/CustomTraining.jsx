@@ -78,13 +78,13 @@ function CustomTraining() {
 
   // SESSION-02: Students loop through categories and generate paths for all images
   function loadTrainingImages() {
-    console.log('Loading training images...');
+    console.log("Loading training images...");
   }
 
   // SESSION-03: Students extract features from images using MobileNet inference
   // SESSION-03: Students create feature and label tensors for training
   async function createTrainingData() {
-    console.log('Creating training data...');
+    console.log("Creating training data...");
     
     const features = [];
     const labels = [];
@@ -100,7 +100,7 @@ function CustomTraining() {
       cat => trainingImages[cat]?.length > 0
     );
     if (!hasAllImages) {
-      alert('Load training images first!');
+      alert("Load training images first!");
       return;
     }
 
@@ -111,10 +111,10 @@ function CustomTraining() {
       const model = createModel();
       
       setModel(model);
-      console.log('Training complete!');
+      console.log("Training complete!");
     } catch (error) {
-      console.error('Training error:', error);
-      alert('Training failed. Check console for details.');
+      console.error("Training error:", error);
+      alert("Training failed. Check console for details.");
     }
     
     setTraining(false);
@@ -123,11 +123,11 @@ function CustomTraining() {
   // Classification logic (PROVIDED)
   async function classifyImage(imageSource) {
     if (!model) {
-      alert('Train the model first!');
+      alert("Train the model first!");
       return;
     }
 
-    console.log('Classifying image...');
+    console.log("Classifying image...");
     
     try {
       const img = typeof imageSource === 'string' 
@@ -146,20 +146,20 @@ function CustomTraining() {
       };
       
       setPrediction(result);
-      console.log('Prediction:', result);
+      console.log("Prediction:", result);
       
       features.dispose();
       prediction.dispose();
     } catch (error) {
-      console.error('Classification error:', error);
-      alert('Failed to classify image. Check console for details.');
+      console.error("Classification error:", error);
+      alert("Failed to classify image. Check console for details.");
     }
   }
 
   // Handle image from URL (PROVIDED)
   async function handleImageUrl() {
     if (!testImageUrl.trim()) {
-      alert('Enter an image URL first!');
+      alert("Enter an image URL first!");
       return;
     }
 
@@ -187,7 +187,7 @@ function CustomTraining() {
   // Save model to downloads (PROVIDED)
   async function saveModel() {
     if (!model) {
-      alert('Train a model first!');
+      alert("Train a model first!");
       return;
     }
 
@@ -203,11 +203,11 @@ function CustomTraining() {
       a.click();
       URL.revokeObjectURL(url);
       
-      console.log('Model saved to downloads!');
-      alert('Model saved! Check your Downloads folder for model files and categories.json');
+      console.log("Model saved to downloads!");
+      alert("Model saved! Check your Downloads folder for model files and categories.json");
     } catch (error) {
-      console.error('Save failed:', error);
-      alert('Failed to save model. Check console for details.');
+      console.error("Save failed:", error);
+      alert("Failed to save model. Check console for details.");
     }
   }
 
@@ -221,11 +221,11 @@ function CustomTraining() {
       const data = await response.json();
       setCategories(data.categories);
       
-      console.log('Saved model loaded!');
-      alert('Saved model loaded successfully!');
+      console.log("Saved model loaded!");
+      alert("Saved model loaded successfully!");
     } catch (error) {
-      console.error('Load failed:', error);
-      alert('Failed to load saved model. Make sure model files are in public/saved-models/custom/');
+      console.error("Load failed:", error);
+      alert("Failed to load saved model. Make sure model files are in public/saved-models/custom/");
     }
   }
 
